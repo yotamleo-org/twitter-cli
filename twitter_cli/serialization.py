@@ -20,6 +20,8 @@ def tweet_to_dict(tweet: Tweet) -> Dict[str, Any]:
             "screenName": tweet.author.screen_name,
             "profileImageUrl": tweet.author.profile_image_url,
             "verified": tweet.author.verified,
+            "followers": tweet.author.followers_count,
+            "following": tweet.author.following_count,
         },
         "metrics": {
             "likes": tweet.metrics.likes,
@@ -96,6 +98,8 @@ def tweet_from_dict(data: Dict[str, Any]) -> Tweet:
             screen_name=str(author_data.get("screenName") or ""),
             profile_image_url=str(author_data.get("profileImageUrl") or ""),
             verified=bool(author_data.get("verified", False)),
+            followers_count=int(author_data.get("followers") or 0),
+            following_count=int(author_data.get("following") or 0),
         ),
         metrics=Metrics(
             likes=int(metrics_data.get("likes") or 0),

@@ -65,6 +65,20 @@ def test_compact_serialization(tweet_factory) -> None:
     assert parsed[0]["author"] == "@alice"
 
 
+def test_tweet_roundtrip_preserves_author_counts(tweet_factory) -> None:
+    tweet = tweet_factory("57")
+    tweet.author.followers_count = 1234
+    tweet.author.following_count = 56
+
+    payload = tweet_to_dict(tweet)
+    assert payload["author"]["followers"] == 1234
+    assert payload["author"]["following"] == 56
+
+    restored = tweet_from_dict(payload)
+    assert restored.author.followers_count == 1234
+    assert restored.author.following_count == 56
+
+
 def test_tweet_roundtrip_preserves_article_fields(tweet_factory) -> None:
     tweet = tweet_factory(
         "88",
